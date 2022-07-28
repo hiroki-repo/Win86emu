@@ -13,6 +13,16 @@
 #include <richedit.h>
 #include <string>
 
+#ifndef GWL_WNDPROC
+#define GWL_WNDPROC -4
+#endif
+#ifndef DWL_DLGPROC
+#define DWL_DLGPROC (DWLP_MSGRESULT + sizeof(LRESULT))
+#endif
+#ifndef GCL_WNDPROC
+#define GCL_WNDPROC -24
+#endif
+
 using namespace std;
 map<string,DWORD> OrigWndProcs;
 

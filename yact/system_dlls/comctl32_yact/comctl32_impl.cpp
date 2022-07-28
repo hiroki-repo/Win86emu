@@ -6,6 +6,37 @@
 #include <callbacks.h>
 #include <x86emul.h>
 
+#include "peldr.h"
+
+DWORD ptr4Pfndaenumcallback = 0;
+
+static DWORD WINAPI PfndaenumcallbackProc(
+	DW p,
+	DW pData
+)
+{
+	if (ptr4Pfndaenumcallback == 0) { return 0; }
+	return EmuExecute(ptr4Pfndaenumcallback,2,p,pData);
+}
+
+typedef DW typeof_DPA_DestroyCallback(
+	DW,
+	DW,
+	DW
+);
+
+//DEFINE_FUNC3(DPA_DestroyCallback)
+EXTERN_C DW STUB_EXPORT yact_DPA_DestroyCallback(DW* R) {
+	typeof_DPA_DestroyCallback* DPA_DestroyCallback = (typeof_DPA_DestroyCallback*)GetProcAddress(GetModuleHandleA("comctl32.dll"), "DPA_DestroyCallback");
+	ptr4Pfndaenumcallback = p2;
+	if (ptr4Pfndaenumcallback == 0) {
+		return DPA_DestroyCallback(p1, 0, p3);
+	}
+	else {
+		return DPA_DestroyCallback(p1, (DW)(&PfndaenumcallbackProc), p3);
+	}
+}
+
 //DEFINE_FUNC1(DllGetVersion)
 EXTERN_C DW STUB_EXPORT yact_DllGetVersion(DW *R)
 {

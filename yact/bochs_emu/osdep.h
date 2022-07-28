@@ -161,10 +161,14 @@ extern "C" {
   // great, just use the usual function
 #elif BX_HAVE_STRTOUQ
   // they have strtouq and not strtoull
-  #define strtoull strtouq
+#ifndef strtoull
+#define strtoull strtouq
+#endif
 #else
+/*#ifndef strtoull
   #define strtoull bx_strtoull
   extern Bit64u bx_strtoull (const char *nptr, char **endptr, int baseignore);
+#endif*/
 #endif
 
 #if !BX_HAVE_STRDUP

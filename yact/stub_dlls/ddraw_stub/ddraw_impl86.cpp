@@ -65,6 +65,21 @@ HRESULT __stdcall CFactory::CreateInstance(IUnknown* UnkOuter, const IID& iid,vo
         return CLASS_E_NOAGGREGATION;
     }
 
+    if (iid == IID_IDirectDraw)
+    {
+        return DirectDrawCreateEx(0, ppv, IID_IDirectDraw, (IUnknown*)0xFFFFFFFF);	// special magic to create DD via COM
+    }
+
+    if (iid == IID_IDirectDraw2)
+    {
+        return DirectDrawCreateEx(0, ppv, IID_IDirectDraw2, (IUnknown*)0xFFFFFFFF);	// special magic to create DD via COM
+    }
+
+    if (iid == IID_IDirectDraw4)
+    {
+        return DirectDrawCreateEx(0, ppv, IID_IDirectDraw4, (IUnknown*)0xFFFFFFFF);	// special magic to create DD via COM
+    }
+
     if(iid==IID_IDirectDraw7)
 	{
 		return DirectDrawCreateEx(0,ppv,IID_IDirectDraw7,(IUnknown*)0xFFFFFFFF);	// special magic to create DD via COM

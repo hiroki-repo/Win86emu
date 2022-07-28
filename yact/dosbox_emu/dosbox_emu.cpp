@@ -154,10 +154,14 @@ Bitu IO_ReadD(Bitu port) {
 	{
 		DWORD *Param=(DWORD*)reg_eax;
 		DWORD Func=*(DWORD*)(reg_eip-4);
+		DWORD Funcy = 0;
 
 		if((0x80000000&Func)==0)
 		{
-			Func=0x80000000|(DWORD)GetHookAddress(((char**)Func)[0],((char**)Func)[1]);
+			Funcy=(DWORD)GetHookAddress(((char**)Func)[0],((char**)Func)[1]);
+			if (Funcy & 0x80000000){ *(UINT8*)(reg_eip - 5) = 1; } else { *(UINT8*)(reg_eip - 5) = 0; }
+			//Func=0x80000000|(DWORD)GetHookAddress(((char**)Func)[0],((char**)Func)[1]);
+			Func=0x80000000|(Funcy&0x7FFFFFFF);
 			if(0x80000000==Func)
 			{
 				Func=*(DWORD*)(reg_eip-4);
@@ -180,7 +184,8 @@ Bitu IO_ReadD(Bitu port) {
 			exit(0);
 #endif
 		__try {
-			tmp=((func*)(0x7fffffff&Func))(Param);
+			//tmp=((func*)(0x7fffffff&Func))(Param);
+			tmp=((func*)((0x7fffffff&Func)|(((*(UINT8*)(reg_eip - 5))&0xFF)?0x80000000:0)))(Param);
 		} __except(EXCEPTION_EXECUTE_HANDLER)
 		{
 #ifdef _DEBUG

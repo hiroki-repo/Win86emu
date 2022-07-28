@@ -4,6 +4,7 @@
 #include "peldr.h"
 #include "callbacks.h"
 #include "x86emul.h"
+#include "stdio.h"
 
 struct __EXCEPTION_REGISTRATION_RECORD {
     struct __EXCEPTION_REGISTRATION_RECORD *Next;
@@ -453,6 +454,82 @@ EXTERN_C DW STUB_EXPORT yact_GetWindowsDirectoryW(DW *R)
 		*P=0;
 	return wcslen(Ptr);
 }
+
+#if 0
+EXTERN_C DW STUB_EXPORT yact_CreateProcessA(DW* R)
+{
+	char windowsdir[1024];
+	DWORD Ret = GetModuleFileNameA(0, windowsdir, 1024);
+	char *windowsdir2 = strrchr(windowsdir, '\\');
+	char windowsdir3[4096] = "";
+	const char windowsdirtmp[128] = "\\execveapp.exe";
+	char windowsdirtmp2[1024] = "";
+	if (windowsdir2) { *windowsdir2 = 0; }
+	strcat(windowsdirtmp2, windowsdir);
+	strcat(windowsdirtmp2,((char*)windowsdirtmp));
+	//MessageBoxA(0, windowsdirtmp2, "", 0);
+	FILE* fp4chk = fopen(windowsdirtmp2, "r");
+	if (fp4chk != 0) {
+		fclose(fp4chk);
+		if (((char*)p1) != 0) {
+			strcat(windowsdir3, windowsdirtmp2);
+			strcat(windowsdir3, " ");
+			strcat(windowsdir3, "\"");
+			strcat(windowsdir3, ((char*)p1));
+			strcat(windowsdir3, "\"");
+			strcat(windowsdir3, ((char*)p2)+strlen(((char*)p1)));
+			return CreateProcessA(windowsdirtmp2, (LPSTR)windowsdir3, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCSTR)p8, (LPSTARTUPINFOA)p9, (LPPROCESS_INFORMATION)p10);
+		}
+		else {
+			strcat(windowsdir3, windowsdirtmp2);
+			strcat(windowsdir3, " ");
+			strcat(windowsdir3, ((char*)p2));
+			return CreateProcessA(windowsdirtmp2, (LPSTR)windowsdir3, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCSTR)p8, (LPSTARTUPINFOA)p9, (LPPROCESS_INFORMATION)p10);
+		}
+	}
+	else {
+		return CreateProcessA((LPCSTR)p1, (LPSTR)p2, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCSTR)p8, (LPSTARTUPINFOA)p9, (LPPROCESS_INFORMATION)p10);
+	}
+}
+EXTERN_C DW STUB_EXPORT yact_CreateProcessW(DW* R)
+{
+	wchar_t windowsdir[1024] = L"";
+	DWORD Ret = GetModuleFileNameW(0, windowsdir, 1024);
+	wchar_t *windowsdir2 = wcsrchr(windowsdir, '\\');
+	wchar_t windowsdir3[2048] = L"";
+	const wchar_t windowsdirtmp[128] = L"\\execveapp.exe";
+	wchar_t windowsdirtmp2[1024] = L"";
+	if (windowsdir2) { *windowsdir2 = 0; }
+	wcscat_s(windowsdirtmp2, windowsdir);
+	wcscat_s(windowsdirtmp2, ((wchar_t*)windowsdirtmp));
+	char windowsdirtmp2x[1024];
+	wcstombs(windowsdirtmp2x, windowsdirtmp2, 1024);
+	//MessageBoxW(0, windowsdirtmp2, L"", 0);
+	FILE* fp4chk = fopen((char*)windowsdirtmp2x, "r");
+	if (fp4chk != 0) {
+		fclose(fp4chk);
+		if (((wchar_t*)p1) != 0) {
+			wcscat_s(windowsdir3, windowsdirtmp2);
+			wcscat_s(windowsdir3, L" ");
+			wcscat_s(windowsdir3, L"\"");
+			wcscat_s(windowsdir3, ((wchar_t*)p1));
+			wcscat_s(windowsdir3, L"\"");
+			wcscat_s(windowsdir3, ((wchar_t*)p2)+wcslen(((wchar_t*)p1)));
+			return CreateProcessW(windowsdirtmp2, (LPWSTR)windowsdir3, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCWSTR)p8, (LPSTARTUPINFOW)p9, (LPPROCESS_INFORMATION)p10);
+		}
+		else {
+			wcscat_s(windowsdir3, windowsdirtmp2);
+			wcscat_s(windowsdir3, L" ");
+			wcscat_s(windowsdir3, ((wchar_t*)p2));
+			return CreateProcessW(windowsdirtmp2, (LPWSTR)windowsdir3, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCWSTR)p8, (LPSTARTUPINFOW)p9, (LPPROCESS_INFORMATION)p10);
+		}
+	}
+	else {
+		return CreateProcessW((LPWSTR)p1, (LPWSTR)p2, (LPSECURITY_ATTRIBUTES)p3, (LPSECURITY_ATTRIBUTES)p4, p5, p6, (LPVOID)p7, (LPCWSTR)p8, (LPSTARTUPINFOW)p9, (LPPROCESS_INFORMATION)p10);
+	}
+}
+
+#endif
 
 EXTERN_C DW STUB_EXPORT yact_GetSystemWindowsDirectoryA(DW *R)
 {

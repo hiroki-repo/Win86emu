@@ -27,6 +27,7 @@
 #endif
 
 /* Define to 1 to use x86 dynamic cpu core */
+
 #define C_DYNAMIC_X86 0
 
 /* Define to 1 to use recompiling cpu core. Can not be used together with the dynamic-x86 core */

@@ -1,5 +1,17 @@
 #include <windows.h>
 
+#ifdef _WIN64
+extern "C" void volatile _InterlockedIncrement8(unsigned char* _ptr)
+{
+	((UINT8*)_ptr)++;
+}
+
+extern "C" void volatile _InterlockedDecrement8(unsigned char* _ptr)
+{
+	((UINT8*)_ptr)--;
+}
+
+#else
 #ifdef _ARM_
 extern "C" __declspec(naked) void volatile _InterlockedIncrement8(unsigned char *ptr)	
 {
@@ -82,4 +94,5 @@ extern "C" __declspec(naked) void volatile _InterlockedDecrement8(unsigned char 
 		ret
 	}
 }
+#endif
 #endif

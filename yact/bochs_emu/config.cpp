@@ -370,7 +370,7 @@ void bx_init_options()
       "sse", "Support for SSE instruction set",
       "Support for SSE/SSE2/SSE3/SSSE3/SSE4_1/SSE4_2 instruction set",
       sse_names,
-      BX_CPUID_SUPPORT_SSE2,
+      BX_CPUID_SUPPORT_SSE4_2,
       BX_CPUID_SUPPORT_NOSSE);
   new bx_param_bool_c(cpuid_param,
       "xapic", "Support for XAPIC extensions",
@@ -383,15 +383,15 @@ void bx_init_options()
   new bx_param_bool_c(cpuid_param,
       "movbe", "Support for MOVBE instruction",
       "Support for MOVBE instruction",
-      0);
+      1);
   new bx_param_bool_c(cpuid_param,
       "aes", "Support for AES instruction set",
       "Support for AES instruction set",
-      0);
+      1);
   new bx_param_bool_c(cpuid_param,
       "xsave", "Support for XSAVE extensions",
       "Support for XSAVE extensions",
-      0);
+      1);
 #if BX_SUPPORT_X86_64
   new bx_param_bool_c(cpuid_param,
       "1g_pages", "1G pages support in long mode",
