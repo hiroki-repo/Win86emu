@@ -90,6 +90,11 @@ PE_EXPORT int PeLdrStartProgram(LPWSTR ExePath)
 	else
 		LogInfo("Import hook installed");
 
+	HM = LoadLibraryA("ncfhook.dll");
+	if (HM != 0) {
+		hook = GetProcAddress(HM, "ncfhook");
+		if (hook != 0) { hook(); }
+	}
 	
 	PE_HANDLE PE;
 	__try {
